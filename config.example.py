@@ -1,0 +1,2 @@
+access_token = 'YOUR_CHANNEL_ACCESS_TOKEN'
+channel_secret = 'YOUR_CHANNEL_SECRET'

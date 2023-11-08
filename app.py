@@ -56,4 +56,4 @@ def handle_message(event):
         )
 
 if __name__ == "__main__":
-    app.run(port=1234, debug=True)
+    app.run(port=config.port, debug=True)

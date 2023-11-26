@@ -19,7 +19,13 @@ pip install -r requirements.txt
 3. Change the content in `config.py` to your own information
 4. Run the program
 ```sh
-python app.py
+python echo.py
+```
+```sh
+python text.py
+```
+```sh
+python chat.py
 ```
 
 

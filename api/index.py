@@ -15,7 +15,7 @@ import dotenv
 import os
 
 # Priority use environment variable
-if not os.environ.get('access_token'):
+if ".env" in os.listdir():
     dotenv.load_dotenv()
 
 app = Flask(__name__)

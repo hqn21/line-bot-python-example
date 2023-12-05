@@ -15,8 +15,9 @@ import dotenv
 import os
 
 # Priority use environment variable
-if not os.environ.get('access_token'):
+if ".env" in os.listdir():
     dotenv.load_dotenv()
+    
 _google_generativeai_token = os.environ.get('google_generativeai_token')
 _access_token = os.environ.get('access_token')
 _channel_secret = os.environ.get('channel_secret')

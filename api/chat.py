@@ -15,7 +15,7 @@ import dotenv
 import os
 
 # Priority use environment variable
-if not os.environ.get('access_token'):
+if ".env" in os.listdir():
     dotenv.load_dotenv()
 _google_generativeai_token = os.environ.get('google_generativeai_token')
 _access_token = os.environ.get('access_token')
@@ -51,7 +51,9 @@ def callback():
     try:
         line_handler.handle(body, signature)
     except InvalidSignatureError:
-        route.logger.info("Invalid signature. Please check your channel access token/channel secret.")
+        route.logger.info(
+            "Invalid signature. Please check your channel access token/channel secret."
+        )
         abort(400)
 
     return 'OK'
@@ -67,4 +69,3 @@ def handle_message(event):
                 reply_token=event.reply_token, messages=[TextMessage(text=str(response.last))]
             )
         )
-

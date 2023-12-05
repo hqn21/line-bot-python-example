@@ -32,6 +32,11 @@ models = [m for m in palm.list_models() if 'generateText' in m.supported_generat
 model = models[0].name
 
 
+@app.route("/")
+def isAlive():
+    return "OK"
+
+
 @app.route("/callback", methods=['POST'])
 def callback():
     # get X-Line-Signature header value

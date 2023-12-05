@@ -1,14 +1,17 @@
 # line-bot-python-example
 
 ## About The Project
-It is an echo bot using line-bot-sdk-python.
-
+It is an echo bot using line-bot-sdk-python.  
+This branch is specifically designed for Vercel.  
+The main branch is [here](https://github.com/henry753951/line-bot-python-example)  
 ## Usage
 
 ### Requirements
 * Python >= 3.8
-* Flask 3.0.0
-* line_bot_sdk 3.5.0
+* Flask==3.0.0
+* line_bot_sdk==3.5.0
+* python-dotenv==1.0.0
+* google-generativeai==0.2.2
 
 ### Installation
 1. Install requirements

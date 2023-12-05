@@ -1,34 +1,29 @@
 from flask import Flask, request, abort
 
-from linebot.v3 import (
-    WebhookHandler
-)
-from linebot.v3.exceptions import (
-    InvalidSignatureError
-)
+from linebot.v3 import WebhookHandler
+from linebot.v3.exceptions import InvalidSignatureError
 from linebot.v3.messaging import (
     Configuration,
     ApiClient,
     MessagingApi,
     ReplyMessageRequest,
-    TextMessage
+    TextMessage,
 )
-from linebot.v3.webhooks import (
-    MessageEvent,
-    TextMessageContent
-)
-import google.generativeai as palm
-import config
+from linebot.v3.webhooks import MessageEvent, TextMessageContent
+import dotenv
+import os
 
-palm.configure(api_key=config.google_generativeai_token)
+# Priority use environment variable
+if not os.environ.get('access_token'):
+    dotenv.load_dotenv()
 
 app = Flask(__name__)
+_access_token = os.environ.get('access_token')
+_channel_secret = os.environ.get('channel_secret')
 
-configuration = Configuration(access_token=config.access_token)
-handler = WebhookHandler(config.channel_secret)
+configuration = Configuration(access_token=_access_token)
+handler = WebhookHandler(_channel_secret)
 
-models = [m for m in palm.list_models() if 'generateText' in m.supported_generation_methods]
-model = models[0].name
 
 @app.route("/callback", methods=['POST'])
 def callback():
@@ -52,14 +47,10 @@ def callback():
 @handler.add(MessageEvent, message=TextMessageContent)
 def handle_message(event):
     with ApiClient(configuration) as api_client:
-        response = palm.chat(messages=event.message.text)
         line_bot_api = MessagingApi(api_client)
         line_bot_api.reply_message_with_http_info(
             ReplyMessageRequest(
-                reply_token=event.reply_token,
-                messages=[TextMessage(text=str(response.last))]
+                reply_token=event.reply_token, messages=[TextMessage(text=event.message.text)]
             )
         )
 
-if __name__ == "__main__":
-    app.run(port=config.port, debug=True)

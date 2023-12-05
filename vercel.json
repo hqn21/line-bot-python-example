@@ -1,15 +1,7 @@
 {
   "builds": [
     {
-      "src": "api/index.py",
-      "use": "@vercel/python"
-    },
-    {
-      "src": "api/text.py",
-      "use": "@vercel/python"
-    },
-    {
-      "src": "api/chat.py",
+      "src": "api/*.py",
       "use": "@vercel/python"
     }
   ],
@@ -17,14 +9,6 @@
     {
       "src": "/(.*)",
       "dest": "api/index.py"
-    },
-    {
-      "src": "/text/(.*)",
-      "dest": "api/text.py"
-    },
-    {
-      "src": "chat/(.*)",
-      "dest": "api/chat.py"
     }
   ]
 }

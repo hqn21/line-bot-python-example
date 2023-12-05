@@ -1,5 +1,6 @@
 from flask import Flask, request, abort
-
+from . import chat
+from . import text
 from linebot.v3 import WebhookHandler
 from linebot.v3.exceptions import InvalidSignatureError
 from linebot.v3.messaging import (
@@ -18,6 +19,9 @@ if not os.environ.get('access_token'):
     dotenv.load_dotenv()
 
 app = Flask(__name__)
+app.register_blueprint(chat.route,url_prefix='/chat')
+app.register_blueprint(text.route,url_prefix='/text')
+
 _access_token = os.environ.get('access_token')
 _channel_secret = os.environ.get('channel_secret')
 

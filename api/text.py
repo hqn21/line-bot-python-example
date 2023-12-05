@@ -1,4 +1,4 @@
-from flask import Flask, request, abort
+from flask import request, abort, Blueprint
 
 from linebot.v3 import WebhookHandler
 from linebot.v3.exceptions import InvalidSignatureError
@@ -23,7 +23,7 @@ _channel_secret = os.environ.get('channel_secret')
 
 palm.configure(api_key=_google_generativeai_token)
 
-app = Flask(__name__)
+route = Blueprint('text', __name__)
 
 configuration = Configuration(access_token=_access_token)
 line_handler = WebhookHandler(_channel_secret)
@@ -32,25 +32,25 @@ models = [m for m in palm.list_models() if 'generateText' in m.supported_generat
 model = models[0].name
 
 
-@app.route("/")
+@route.route("/")
 def isAlive():
     return "OK"
 
 
-@app.route("/callback", methods=['POST'])
+@route.route("/callback", methods=['POST'])
 def callback():
     # get X-Line-Signature header value
     signature = request.headers['X-Line-Signature']
 
     # get request body as text
     body = request.get_data(as_text=True)
-    app.logger.info("Request body: " + body)
+    route.logger.info("Request body: " + body)
 
     # handle webhook body
     try:
         line_handler.handle(body, signature)
     except InvalidSignatureError:
-        app.logger.info("Invalid signature. Please check your channel access token/channel secret.")
+        route.logger.info("Invalid signature. Please check your channel access token/channel secret.")
         abort(400)
 
     return 'OK'
@@ -74,6 +74,3 @@ def handle_message(event):
             )
         )
 
-
-if __name__ == "__main__":
-    app.run()

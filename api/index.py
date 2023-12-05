@@ -22,7 +22,7 @@ _access_token = os.environ.get('access_token')
 _channel_secret = os.environ.get('channel_secret')
 
 configuration = Configuration(access_token=_access_token)
-handler = WebhookHandler(_channel_secret)
+line_handler = WebhookHandler(_channel_secret)
 
 
 @app.route("/")
@@ -41,7 +41,7 @@ def callback():
 
     # handle webhook body
     try:
-        handler.handle(body, signature)
+        line_handler.handle(body, signature)
     except InvalidSignatureError:
         app.logger.info("Invalid signature. Please check your channel access token/channel secret.")
         abort(400)
@@ -49,7 +49,7 @@ def callback():
     return 'OK'
 
 
-@handler.add(MessageEvent, message=TextMessageContent)
+@line_handler.add(MessageEvent, message=TextMessageContent)
 def handle_message(event):
     with ApiClient(configuration) as api_client:
         line_bot_api = MessagingApi(api_client)

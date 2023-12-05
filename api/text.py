@@ -26,7 +26,7 @@ palm.configure(api_key=_google_generativeai_token)
 app = Flask(__name__)
 
 configuration = Configuration(access_token=_access_token)
-handler = WebhookHandler(_channel_secret)
+line_handler = WebhookHandler(_channel_secret)
 
 models = [m for m in palm.list_models() if 'generateText' in m.supported_generation_methods]
 model = models[0].name
@@ -43,7 +43,7 @@ def callback():
 
     # handle webhook body
     try:
-        handler.handle(body, signature)
+        line_handler.handle(body, signature)
     except InvalidSignatureError:
         app.logger.info("Invalid signature. Please check your channel access token/channel secret.")
         abort(400)
@@ -51,7 +51,7 @@ def callback():
     return 'OK'
 
 
-@handler.add(MessageEvent, message=TextMessageContent)
+@line_handler.add(MessageEvent, message=TextMessageContent)
 def handle_message(event):
     with ApiClient(configuration) as api_client:
         prompt = event.message.text

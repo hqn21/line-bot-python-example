@@ -1,4 +1,4 @@
-from flask import request, abort, Blueprint
+from flask import request, abort, Blueprint, current_app
 
 from linebot.v3 import WebhookHandler
 from linebot.v3.exceptions import InvalidSignatureError
@@ -17,7 +17,7 @@ import os
 # Priority use environment variable
 if ".env" in os.listdir():
     dotenv.load_dotenv()
-    
+
 _google_generativeai_token = os.environ.get('google_generativeai_token')
 _access_token = os.environ.get('access_token')
 _channel_secret = os.environ.get('channel_secret')
@@ -45,13 +45,15 @@ def callback():
 
     # get request body as text
     body = request.get_data(as_text=True)
-    route.logger.info("Request body: " + body)
+    current_app.logger.info("Request body: " + body)
 
     # handle webhook body
     try:
         line_handler.handle(body, signature)
     except InvalidSignatureError:
-        route.logger.info("Invalid signature. Please check your channel access token/channel secret.")
+        current_app.logger.info(
+            "Invalid signature. Please check your channel access token/channel secret."
+        )
         abort(400)
 
     return 'OK'
@@ -74,4 +76,3 @@ def handle_message(event):
                 reply_token=event.reply_token, messages=[TextMessage(text=str(completion.result))]
             )
         )
-

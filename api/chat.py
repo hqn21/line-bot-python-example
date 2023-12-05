@@ -1,4 +1,4 @@
-from flask import request, abort, Blueprint
+from flask import request, abort, Blueprint, current_app
 
 from linebot.v3 import WebhookHandler
 from linebot.v3.exceptions import InvalidSignatureError
@@ -45,13 +45,13 @@ def callback():
 
     # get request body as text
     body = request.get_data(as_text=True)
-    route.logger.info("Request body: " + body)
+    current_app.logger.info("Request body: " + body)
 
     # handle webhook body
     try:
         line_handler.handle(body, signature)
     except InvalidSignatureError:
-        route.logger.info(
+        current_app.logger.info(
             "Invalid signature. Please check your channel access token/channel secret."
         )
         abort(400)

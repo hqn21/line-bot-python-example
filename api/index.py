@@ -1,6 +1,6 @@
 from flask import Flask, request, abort
-from . import chat
-from . import text
+import chat
+import text
 from linebot.v3 import WebhookHandler
 from linebot.v3.exceptions import InvalidSignatureError
 from linebot.v3.messaging import (
@@ -65,4 +65,4 @@ def handle_message(event):
 
 
 if __name__ == "__main__":
-    app.run()
+    app.run(debug=True)

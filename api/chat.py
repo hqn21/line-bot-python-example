@@ -59,13 +59,26 @@ def callback():
     return 'OK'
 
 
+history = []
+
+
 @line_handler.add(MessageEvent, message=TextMessageContent)
 def handle_message(event):
     with ApiClient(configuration) as api_client:
-        response = palm.chat(messages=event.message.text)
+        global history
+        history.append(event.message.text)
+        history = history[-10:]
+        response = palm.chat(messages=history)
+        current_app.logger.info(response)
+        if response.filters:
+            current_app.logger.info(response.filters)
+            reply = "回覆內容被阻擋 (不支援中文)"
+        else:
+            reply = response.last
+
         line_bot_api = MessagingApi(api_client)
         line_bot_api.reply_message_with_http_info(
             ReplyMessageRequest(
-                reply_token=event.reply_token, messages=[TextMessage(text=str(response.last))]
+                reply_token=event.reply_token, messages=[TextMessage(text=str(reply))]
             )
         )

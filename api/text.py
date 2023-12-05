@@ -1,22 +1,15 @@
 from flask import Flask, request, abort
 
-from linebot.v3 import (
-    WebhookHandler
-)
-from linebot.v3.exceptions import (
-    InvalidSignatureError
-)
+from linebot.v3 import WebhookHandler
+from linebot.v3.exceptions import InvalidSignatureError
 from linebot.v3.messaging import (
     Configuration,
     ApiClient,
     MessagingApi,
     ReplyMessageRequest,
-    TextMessage
+    TextMessage,
 )
-from linebot.v3.webhooks import (
-    MessageEvent,
-    TextMessageContent
-)
+from linebot.v3.webhooks import MessageEvent, TextMessageContent
 import google.generativeai as palm
 import dotenv
 import os
@@ -37,6 +30,7 @@ handler = WebhookHandler(_channel_secret)
 
 models = [m for m in palm.list_models() if 'generateText' in m.supported_generation_methods]
 model = models[0].name
+
 
 @app.route("/callback", methods=['POST'])
 def callback():
@@ -71,7 +65,10 @@ def handle_message(event):
         line_bot_api = MessagingApi(api_client)
         line_bot_api.reply_message_with_http_info(
             ReplyMessageRequest(
-                reply_token=event.reply_token,
-                messages=[TextMessage(text=str(completion.result))]
+                reply_token=event.reply_token, messages=[TextMessage(text=str(completion.result))]
             )
         )
+
+
+if __name__ == "__main__":
+    app.run()

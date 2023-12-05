@@ -24,9 +24,11 @@ _channel_secret = os.environ.get('channel_secret')
 configuration = Configuration(access_token=_access_token)
 handler = WebhookHandler(_channel_secret)
 
+
 @app.route("/")
 def isAlive():
     return "OK"
+
 
 @app.route("/callback", methods=['POST'])
 def callback():
@@ -57,3 +59,6 @@ def handle_message(event):
             )
         )
 
+
+if __name__ == "__main__":
+    app.run()

@@ -1,7 +1,7 @@
 {
-    "rewrites": [
-      { "source": "/echo/(.*)", "destination": "/api/index" },
-      { "source": "/text/(.*)", "destination": "/api/text" },
-      { "source": "/chat/(.*)", "destination": "/api/chat" }
-    ]
-  }
+  "rewrites": [
+    { "source": "/echo/(.*)", "destination": "/api/index" },
+    { "source": "/text/(.*)", "destination": "/api/text" },
+    { "source": "/chat/(.*)", "destination": "/api/chat" }
+  ]
+}

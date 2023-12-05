@@ -61,3 +61,7 @@ def handle_message(event):
                 reply_token=event.reply_token, messages=[TextMessage(text=str(response.last))]
             )
         )
+
+
+if __name__ == "__main__":
+    app.run()

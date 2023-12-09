@@ -23,7 +23,7 @@ _channel_secret = os.environ.get('channel_secret')
 
 palm.configure(api_key=_google_generativeai_token)
 
-route = Blueprint(name="chat",import_name=__name__)
+route = Blueprint(name="__chat",import_name=__name__)
 
 
 configuration = Configuration(access_token=_access_token)

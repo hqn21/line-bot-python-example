@@ -24,7 +24,7 @@ _channel_secret = os.environ.get('channel_secret')
 
 palm.configure(api_key=_google_generativeai_token)
 
-route = Blueprint('text_', __name__)
+route = Blueprint(name="text")
 
 configuration = Configuration(access_token=_access_token)
 line_handler = WebhookHandler(_channel_secret)

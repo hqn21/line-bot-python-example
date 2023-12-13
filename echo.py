@@ -25,7 +25,7 @@ configuration = Configuration(access_token=config.access_token)
 handler = WebhookHandler(config.channel_secret)
 
 
-@app.route("/callback", methods=['POST'])
+@app.route("/echo", methods=['POST'])
 def callback():
     # get X-Line-Signature header value
     signature = request.headers['X-Line-Signature']

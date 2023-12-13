@@ -30,7 +30,7 @@ handler = WebhookHandler(config.channel_secret)
 models = [m for m in palm.list_models() if 'generateText' in m.supported_generation_methods]
 model = models[0].name
 
-@app.route("/callback", methods=['POST'])
+@app.route("/text", methods=['POST'])
 def callback():
     # get X-Line-Signature header value
     signature = request.headers['X-Line-Signature']
